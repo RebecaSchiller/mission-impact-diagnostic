@@ -473,14 +473,14 @@ REWRITES: Provide rewrites for the 2-3 WEAKEST sections only. Each rewrite shoul
 
   try {
     const apiKey = document.getElementById('apiKey').value.trim();
-    const scriptUrl = document.getElementById('scriptUrl').value.trim();
+    const diagScriptUrl = document.getElementById('scriptUrl').value.trim();
     if (!apiKey || !apiKey.startsWith('sk-ant-')) {
       showError('Please enter your Anthropic API key to run the analysis.');
       btn.disabled = false;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Analyze My Email';
       return;
     }
-    if (!scriptUrl || !scriptUrl.includes('script.google.com')) {
+    if (!diagScriptUrl || !diagScriptUrl.includes('script.google.com')) {
       showError('Please enter your Google Apps Script URL to run the analysis.');
       btn.disabled = false;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Analyze My Email';
@@ -489,10 +489,9 @@ REWRITES: Provide rewrites for the 2-3 WEAKEST sections only. Each rewrite shoul
 
     // Save key to localStorage
     localStorage.setItem('psc_diagnostic_key', apiKey);
-    localStorage.setItem('psc_diagnostic_script', scriptUrl);
+    localStorage.setItem('psc_diagnostic_script', diagScriptUrl);
 
-    const scriptUrl = document.getElementById('scriptUrl').value.trim();
-    const aiUrl = scriptUrl + '?' + new URLSearchParams({ action: 'ai_suggest', apiKey, prompt }).toString();
+    const aiUrl = diagScriptUrl + '?' + new URLSearchParams({ action: 'ai_suggest', apiKey, prompt }).toString();
     const response = await fetch(aiUrl);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
